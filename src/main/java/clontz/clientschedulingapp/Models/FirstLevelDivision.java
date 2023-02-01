@@ -3,6 +3,7 @@ package clontz.clientschedulingapp.Models;
 public class FirstLevelDivision {
     private int id;
     private String name;
+    private int country_id;
 
     public int getId() {
         return id;
@@ -28,5 +29,8 @@ public class FirstLevelDivision {
         this.country_id = country_id;
     }
 
-    private int country_id;
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

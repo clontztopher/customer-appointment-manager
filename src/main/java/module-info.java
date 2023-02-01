@@ -10,4 +10,6 @@ module clontz.clientschedulingapp {
     exports clontz.clientschedulingapp.Controllers;
     opens clontz.clientschedulingapp.Models to javafx.fxml;
     exports clontz.clientschedulingapp.Models;
+    opens clontz.clientschedulingapp.Helpers to javafx.fxml;
+    exports clontz.clientschedulingapp.Helpers;
 }

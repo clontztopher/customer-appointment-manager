@@ -1,21 +1,23 @@
 package clontz.clientschedulingapp;
 
-import clontz.clientschedulingapp.Controllers.NavController;
 import clontz.clientschedulingapp.DataService.DBConnector;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ClientScheduler extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        // Initialize database connection
         DBConnector.openConnection();
-        NavController.setActiveView(NavController.View.REPORTS);
-        URL fxml = ClientScheduler.class.getResource("Controllers/manage-customer-view.fxml");
+        // Load login screen
+        URL fxml = ClientScheduler.class.getResource("Controllers/signin-view.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(fxml);
         Scene scene = new Scene(fxmlLoader.load(), 960 , 600);
         stage.setTitle("Log In");

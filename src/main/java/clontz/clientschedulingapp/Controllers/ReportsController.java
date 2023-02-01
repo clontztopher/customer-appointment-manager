@@ -1,6 +1,5 @@
 package clontz.clientschedulingapp.Controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
@@ -15,6 +14,7 @@ public class ReportsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        NavController.setActiveView(NavController.View.REPORTS);
         System.out.println(url);
         System.out.println("Opened Reports");
     }

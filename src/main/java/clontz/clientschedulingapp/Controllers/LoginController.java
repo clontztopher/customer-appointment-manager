@@ -1,20 +1,23 @@
 package clontz.clientschedulingapp.Controllers;
 
 import clontz.clientschedulingapp.DataService.DBConnector;
+import clontz.clientschedulingapp.DataService.UserDAO;
+import clontz.clientschedulingapp.Helpers.Session;
+import clontz.clientschedulingapp.Models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -26,30 +29,32 @@ public class LoginController implements Initializable {
 
     @FXML
     public TextField passwordField;
+    public Button signinBtn;
 
     public void attemptLogin(ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        if (username.equals("") || password.equals("")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a username and password.");
+            alert.showAndWait();
+            return;
+        }
+
+        UserDAO userDAO = new UserDAO(DBConnector.connection);
+        User user = userDAO.validateLogin(username, password);
+
+        if (user == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Username and/or password incorrect.");
+            alert.showAndWait();
+            return;
+        }
+
+        Session.setUser(user);
+        NavController.setActiveView(NavController.View.REPORTS);
+
         try {
-            String query = "SELECT User_Name, Password from users WHERE User_Name=?;";
-            PreparedStatement prepStmt = DBConnector.connection.prepareStatement(query);
-            prepStmt.setString(1, username);
-            ResultSet resultSet = prepStmt.executeQuery();
-
-            if (!resultSet.next()) {
-                throw new Exception("Username not found.");
-            }
-
-            String savedPassword = resultSet.getString("Password");
-
-            if (!savedPassword.equals(password)) {
-                throw new Exception("Incorrect password.");
-            }
-
-            System.out.println("Success");
-
-            Parent root = FXMLLoader.load(getClass().getResource("reports-view.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("manage-appointment-view.fxml"));
             Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setTitle("Reports");
@@ -57,13 +62,14 @@ public class LoginController implements Initializable {
             stage.show();
 
         } catch(Exception e) {
-            // TODO: Output to view
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // TODO: For testing, remove
+        usernameField.setText("test");
+        passwordField.setText("test");
     }
 }

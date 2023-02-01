@@ -18,7 +18,7 @@
                 <TextField fx:id="usernameField" />
                 <Label text="Password" />
                 <TextField fx:id="passwordField" />
-            <Button mnemonicParsing="false" onAction="#attemptLogin" text="Sign In" />
+            <Button fx:id="signinBtn" mnemonicParsing="false" onAction="#attemptLogin" text="Sign In" />
 
                 <Label fx:id="languageText" text="Language" />
             </VBox>

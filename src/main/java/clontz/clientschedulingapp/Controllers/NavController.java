@@ -66,18 +66,19 @@ public class NavController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String activBtnStyle = "-fx-background-color: darkslategrey; -fx-text-fill: white;";
+        String activeBtnStyle = "-fx-background-color: darkslategrey; -fx-text-fill: white;";
         String inactiveBtnStyle = "-fx-background-color: lightgrey; -fx-text-fill: black;";
+
         if (activeView.equals(View.REPORTS)) {
-            reportsBtn.setStyle(activBtnStyle);
+            reportsBtn.setStyle(activeBtnStyle);
             appointmentsBtn.setStyle(inactiveBtnStyle);
             customersBtn.setStyle(inactiveBtnStyle);
         } else if (activeView.equals(View.CUSTOMERS)) {
-            customersBtn.setStyle(activBtnStyle);
+            customersBtn.setStyle(activeBtnStyle);
             reportsBtn.setStyle(inactiveBtnStyle);
             appointmentsBtn.setStyle(inactiveBtnStyle);
         } else {
-            appointmentsBtn.setStyle(activBtnStyle);
+            appointmentsBtn.setStyle(activeBtnStyle);
             reportsBtn.setStyle(inactiveBtnStyle);
             customersBtn.setStyle(inactiveBtnStyle);
         }
