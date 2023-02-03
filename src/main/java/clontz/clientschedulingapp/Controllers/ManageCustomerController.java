@@ -78,7 +78,6 @@ public class ManageCustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        NavController.setActiveView(NavController.View.CUSTOMERS);
         // Set up customer TableView
         customerTable.setItems(customerList);
 

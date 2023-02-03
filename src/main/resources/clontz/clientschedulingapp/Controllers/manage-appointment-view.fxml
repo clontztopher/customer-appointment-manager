@@ -64,7 +64,7 @@
                         <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Text fx:id="customerIDField" strokeType="OUTSIDE" strokeWidth="0.0" text="Unavailable" GridPane.columnIndex="1" />
+                        <Text fx:id="appointmentIDField" strokeType="OUTSIDE" strokeWidth="0.0" text="Unavailable" GridPane.columnIndex="1" />
                         <Label text="Title" GridPane.rowIndex="1" />
                         <TextField fx:id="titleInput" GridPane.rowIndex="2" />
                         <Label text="Location" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -80,9 +80,7 @@
                         <DatePicker fx:id="startDateSelect" promptText="Select Start Date" GridPane.rowIndex="8" />
                         <Label text="End Date" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <DatePicker fx:id="endDateSelect" promptText="Select End Date" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="End Time" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <ComboBox fx:id="endTimeSelect" prefWidth="150.0" promptText="Select End Time" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <ComboBox fx:id="startTimeSelect" prefWidth="150.0" promptText="Select Start Time" GridPane.rowIndex="10" />
+                        <Label text="End Time (HH:MM)" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                         <TextField fx:id="typeInput" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                         <ButtonBar prefHeight="25.0" prefWidth="217.0" GridPane.columnSpan="2" GridPane.rowIndex="12">
                            <buttons>
@@ -94,8 +92,10 @@
                               <Insets right="20.0" />
                            </padding>
                         </ButtonBar>
-                        <Label text="Start Time" GridPane.rowIndex="9" />
-                        <Label text="Type" GridPane.rowIndex="11" />
+                        <Label text="Start Time  (HH:MM)" GridPane.rowIndex="9" />
+                        <Label text="Type" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+                        <TextField fx:id="startTimeField" GridPane.rowIndex="10" />
+                        <TextField fx:id="endTimeField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                      </children>
                   </GridPane>
                </children>
