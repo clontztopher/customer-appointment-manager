@@ -1,6 +1,7 @@
 package clontz.clientschedulingapp.Models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Appointment {
     private int id;
@@ -97,5 +98,13 @@ public class Appointment {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public String getStartFormatted() {
+        return getStart().format(DateTimeFormatter.ofPattern("MM/dd/YYYY hh:mm a"));
+    }
+
+    public String getEndFormatted() {
+        return getEnd().format(DateTimeFormatter.ofPattern("MM/dd/YYYY hh:mm a"));
     }
 }

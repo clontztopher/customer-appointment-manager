@@ -23,9 +23,9 @@
    <children>
       <fx:include fx:id="navMenu" source="nav-view.fxml" />
       <Separator prefWidth="200.0" />
-      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="300.0" spacing="5.0">
+            <VBox prefHeight="125.0" prefWidth="270.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <Text fill="#545454" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Update Appointments">
                      <VBox.margin>
@@ -43,61 +43,25 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Text>
-                  <GridPane hgap="10.0" prefHeight="343.0" prefWidth="300.0" vgap="5.0" VBox.vgrow="ALWAYS">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" />
-                      <RowConstraints maxHeight="23.0" minHeight="10.0" prefHeight="16.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="20.0" valignment="TOP" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="18.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="20.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="26.0" valignment="TOP" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="19.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="26.0" valignment="TOP" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="18.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="27.0" valignment="TOP" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="33.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Text fx:id="appointmentIDField" strokeType="OUTSIDE" strokeWidth="0.0" text="Unavailable" GridPane.columnIndex="1" />
-                        <Label text="Title" GridPane.rowIndex="1" />
-                        <TextField fx:id="titleInput" GridPane.rowIndex="2" />
-                        <Label text="Location" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="locationInput" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Description" GridPane.rowIndex="3" />
-                        <TextArea fx:id="descriptionTextBox" prefHeight="38.0" prefWidth="220.0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                        <Label text="Appointment ID" />
-                        <Label text="Contact" GridPane.rowIndex="5" />
-                        <ComboBox fx:id="contactBox" prefWidth="150.0" promptText="Select Contact" GridPane.rowIndex="6" />
-                        <Label text="Customer" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <ComboBox fx:id="customerBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="Start Date" GridPane.rowIndex="7" />
-                        <DatePicker fx:id="startDateSelect" promptText="Select Start Date" GridPane.rowIndex="8" />
-                        <Label text="End Date" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <DatePicker fx:id="endDateSelect" promptText="Select End Date" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="End Time (HH:MM)" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <TextField fx:id="typeInput" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <ButtonBar prefHeight="25.0" prefWidth="217.0" GridPane.columnSpan="2" GridPane.rowIndex="12">
-                           <buttons>
-                              <Button mnemonicParsing="false" onAction="#saveChanges" text="Save" />
-                              <Button mnemonicParsing="false" onAction="#clearAppointmentForm" prefHeight="25.0" prefWidth="90.0" text="Clear" />
-                              <Button mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
-                           </buttons>
-                           <padding>
-                              <Insets right="20.0" />
-                           </padding>
-                        </ButtonBar>
-                        <Label text="Start Time  (HH:MM)" GridPane.rowIndex="9" />
-                        <Label text="Type" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
-                        <TextField fx:id="startTimeField" GridPane.rowIndex="10" />
-                        <TextField fx:id="endTimeField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                     </children>
-                  </GridPane>
+                  <Label text="Appointment ID">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Text fx:id="appointmentIDField" strokeType="OUTSIDE" strokeWidth="0.0" text="Unavailable" />
+                  <ButtonBar prefHeight="25.0" prefWidth="217.0">
+                     <buttons>
+                        <Button mnemonicParsing="false" onAction="#saveChanges" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#clearAppointmentForm" prefHeight="25.0" prefWidth="90.0" text="Clear" />
+                        <Button mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
+                     </buttons>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </ButtonBar>
                </children>
                <opaqueInsets>
                   <Insets />
@@ -106,30 +70,68 @@
                   <Insets right="20.0" />
                </padding>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <GridPane hgap="10.0" minHeight="200.0" vgap="5.0" HBox.hgrow="ALWAYS">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="181.5" minWidth="138.5" prefWidth="162.5" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="147.0" minWidth="10.0" prefWidth="123.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="33.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="35.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="38.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="59.0" minHeight="25.0" prefHeight="42.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="30.0" minHeight="1.0" prefHeight="18.0" valignment="BOTTOM" vgrow="ALWAYS" />
+              </rowConstraints>
                <children>
-                  <TableView fx:id="appointmentTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                     <columns>
-                        <TableColumn fx:id="idCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn fx:id="descCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Description" />
-                        <TableColumn fx:id="locationCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Location" />
-                        <TableColumn fx:id="contactCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Contact" />
-                        <TableColumn fx:id="typeCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Type" />
-                        <TableColumn fx:id="startCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Start" />
-                        <TableColumn fx:id="endCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="End" />
-                        <TableColumn fx:id="customerCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Customer ID" />
-                        <TableColumn fx:id="userCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="User ID" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <Label text="Title" />
+                  <TextField fx:id="titleInput" GridPane.rowIndex="1" />
+                  <Label text="Location" GridPane.columnIndex="1" />
+                  <TextField fx:id="locationInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Description" GridPane.rowIndex="2" />
+                  <TextArea fx:id="descriptionTextBox" prefHeight="124.0" prefWidth="212.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <Label text="Contact" GridPane.columnIndex="2" />
+                  <ComboBox fx:id="contactBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label text="Customer" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="customerBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                  <Label text="Start Date" GridPane.columnIndex="3" />
+                  <DatePicker fx:id="startDateSelect" promptText="Select Start Date" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Label text="End Date" GridPane.columnIndex="4" />
+                  <DatePicker fx:id="endDateSelect" promptText="Select End Date" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <Label text="End Time (HH:MM)" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <TextField fx:id="typeInput" prefHeight="11.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Start Time  (HH:MM)" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Label text="Type" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                  <TextField fx:id="startTimeField" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                  <TextField fx:id="endTimeField" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.valignment="TOP" />
                </children>
-            </VBox>
+            </GridPane>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TableView fx:id="appointmentTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="idCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                  <TableColumn fx:id="descCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Description" />
+                  <TableColumn fx:id="locationCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Location" />
+                  <TableColumn fx:id="contactCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Contact" />
+                  <TableColumn fx:id="typeCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Type" />
+                  <TableColumn fx:id="startCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Start" />
+                  <TableColumn fx:id="endCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="End" />
+                  <TableColumn fx:id="customerCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="Customer ID" />
+                  <TableColumn fx:id="userCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="User ID" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
       </HBox>
    </children>
 </VBox>

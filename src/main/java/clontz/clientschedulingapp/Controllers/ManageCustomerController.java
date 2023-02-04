@@ -61,7 +61,12 @@ public class ManageCustomerController implements Initializable {
         }
 
         CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
-        Customer customer = new Customer();
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+
+        if (customer == null) {
+            customer = new Customer();
+        }
+
         customer.setName(name);
         customer.setAddress(address);
         customer.setPostalCode(postal_code);
@@ -69,10 +74,18 @@ public class ManageCustomerController implements Initializable {
         customer.setCountry(country);
         customer.setDivision(firstLevelDivision);
         if (customerIDField.getText().equals("Unavailable")) {
-            customerDAO.create(customer);
+            int customerId = customerDAO.create(customer);
+            customer.setId(customerId);
             customerList.add(customer);
         } else {
             customerDAO.update(customer);
+            Customer finalCustomer = customer;
+            customerList.setAll(customerList.stream().map(c -> {
+                if (c.getId() == finalCustomer.getId()) {
+                    return finalCustomer;
+                }
+                return c;
+            }).toList());
         }
     }
 

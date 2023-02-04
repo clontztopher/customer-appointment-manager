@@ -82,6 +82,7 @@ public class CustomerDAO {
             prepState.setString(3, customer.getPostalCode());
             prepState.setString(4, customer.getPhone());
             prepState.setInt(5, customer.getDivision().getId());
+            prepState.setInt(6, customer.getId());
             prepState.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -89,7 +90,7 @@ public class CustomerDAO {
         }
     }
 
-    public Customer create(Customer customer) {
+    public int create(Customer customer) {
         try (PreparedStatement prepState = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)){
             prepState.setString(1, customer.getName());
             prepState.setString(2, customer.getAddress());
@@ -104,8 +105,7 @@ public class CustomerDAO {
                 throw new RuntimeException("User could not be created.");
             }
 
-            customer.setId(rs.getInt(1));
-            return customer;
+            return rs.getInt(1);
         } catch(Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
