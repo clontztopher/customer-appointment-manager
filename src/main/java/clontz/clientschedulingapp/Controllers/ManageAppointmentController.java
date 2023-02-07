@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.*;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -33,8 +32,7 @@ public class ManageAppointmentController implements Initializable {
     public TextArea descriptionTextBox;
     public ComboBox<Contact> contactBox;
     public ComboBox<Customer> customerBox;
-    public DatePicker startDateSelect;
-    public DatePicker endDateSelect;
+    public DatePicker dateSelect;
     public TextField typeInput;
     public ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     public TableView<Appointment> appointmentTable;
@@ -50,7 +48,25 @@ public class ManageAppointmentController implements Initializable {
     public TextField startTimeField;
     public TextField endTimeField;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Contacts
+        ContactDAO contactDAO = new ContactDAO(DBConnector.connection);
+        List<Contact> contactsList = contactDAO.findAll();
+        ObservableList<Contact> contactsComboList = FXCollections.observableArrayList();
+        contactsComboList.addAll(contactsList);
+        contactBox.setItems(contactsComboList);
 
+        // Customers
+        CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
+        List<Customer> customerList = customerDAO.findAll();
+        ObservableList<Customer> customerComboList = FXCollections.observableArrayList();
+        customerComboList.addAll(customerList);
+        customerBox.setItems(customerComboList);
+
+        // Appointment Table
+        setUpAppointmentTable();
+    }
 
     public void saveChanges(ActionEvent actionEvent) {
         String title = titleInput.getText();
@@ -59,9 +75,8 @@ public class ManageAppointmentController implements Initializable {
         String type = typeInput.getText();
         Contact contact = contactBox.getValue();
         Customer customer = customerBox.getValue();
-        LocalDate startDate = startDateSelect.getValue();
+        LocalDate date = dateSelect.getValue();
         String startTimeText = startTimeField.getText();
-        LocalDate endDate = endDateSelect.getValue();
         String endTimeText = endTimeField.getText();
         int user_id = Session.getUser().getId();
 
@@ -72,9 +87,8 @@ public class ManageAppointmentController implements Initializable {
                 || type.equals("")
                 || (contact == null)
                 || (customer == null)
-                || (startDate == null)
+                || (date == null)
                 || startTimeText.equals("")
-                || (endDate == null)
                 || endTimeText.equals("")
         ) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please make sure all fields are completed.");
@@ -96,8 +110,8 @@ public class ManageAppointmentController implements Initializable {
         try {
             startTime = LocalTime.parse(startTimeText);
             endTime = LocalTime.parse(endTimeText);
-            startDateTime = LocalDateTime.of(startDate, startTime);
-            endDateTime = LocalDateTime.of(endDate, endTime);
+            startDateTime = LocalDateTime.of(date, startTime);
+            endDateTime = LocalDateTime.of(date, endTime);
         } catch (DateTimeParseException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a time format matching 'HH:mm'.");
             alert.showAndWait();
@@ -132,6 +146,7 @@ public class ManageAppointmentController implements Initializable {
                 int appointmentId = appointmentDAO.create(appointment);
                 appointment.setId(appointmentId);
                 appointments.add(appointment);
+                appointmentIDField.setText(String.valueOf(appointmentId));
         } else {
             appointmentDAO.update(appointment);
             Appointment finalAppointment = appointment;
@@ -158,35 +173,31 @@ public class ManageAppointmentController implements Initializable {
         customerBox.getSelectionModel().clearSelection();
         customerBox.setValue(null);
 
-        startDateSelect.setValue(null);
+        dateSelect.setValue(null);
         startTimeField.setText("");
-        endDateSelect.setValue(null);
         endTimeField.setText("");
         typeInput.setText("");
 
     }
 
     public void deleteAppointment(ActionEvent actionEvent) {
-    }
+        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Contacts
-        ContactDAO contactDAO = new ContactDAO(DBConnector.connection);
-        List<Contact> contactsList = contactDAO.findAll();
-        ObservableList<Contact> contactsComboList = FXCollections.observableArrayList();
-        contactsComboList.addAll(contactsList);
-        contactBox.setItems(contactsComboList);
+        if (appointment == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an appointment.");
+            alert.showAndWait();
+            return;
+        }
 
-        // Customers
-        CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
-        List<Customer> customerList = customerDAO.findAll();
-        ObservableList<Customer> customerComboList = FXCollections.observableArrayList();
-        customerComboList.addAll(customerList);
-        customerBox.setItems(customerComboList);
+        AppointmentDAO appointmentDAO = new AppointmentDAO(DBConnector.connection);
 
-        // Appointment Table
-        setUpAppointmentTable();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Confirm cancellation of appointment: " + appointment.getId() + ", " + appointment.getType() + ".");
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent(response -> {
+                    appointmentDAO.delete(appointment);
+                    appointments.remove(appointment);
+                });
     }
 
     public void setUpAppointmentTable() {
@@ -226,12 +237,10 @@ public class ManageAppointmentController implements Initializable {
             LocalTime startTime = startDateTime.toLocalTime();
 
             LocalDateTime endDateTime = selectedAppointment.getEnd();
-            LocalDate endDate = endDateTime.toLocalDate();
             LocalTime endTime = endDateTime.toLocalTime();
 
-            startDateSelect.setValue(startDate);
+            dateSelect.setValue(startDate);
             startTimeField.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm")));
-            endDateSelect.setValue(endDate);
             endTimeField.setText(endTime.format(DateTimeFormatter.ofPattern("HH:mm")));
             typeInput.setText(selectedAppointment.getType());
         });

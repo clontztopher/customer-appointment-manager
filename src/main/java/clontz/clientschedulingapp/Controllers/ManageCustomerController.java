@@ -1,9 +1,6 @@
 package clontz.clientschedulingapp.Controllers;
 
-import clontz.clientschedulingapp.DataService.CountryDAO;
-import clontz.clientschedulingapp.DataService.CustomerDAO;
-import clontz.clientschedulingapp.DataService.DBConnector;
-import clontz.clientschedulingapp.DataService.FirstLevelDivisionDAO;
+import clontz.clientschedulingapp.DataService.*;
 import clontz.clientschedulingapp.Models.Country;
 import clontz.clientschedulingapp.Models.Customer;
 import clontz.clientschedulingapp.Models.FirstLevelDivision;
@@ -19,7 +16,6 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class ManageCustomerController implements Initializable {
     public TableColumn<String, Integer> idCol;
@@ -38,56 +34,6 @@ public class ManageCustomerController implements Initializable {
     public ComboBox<FirstLevelDivision> divisionComboBox;
     public Text customerIDField;
     public TableView<Customer> customerTable;
-
-    public void saveChanges(ActionEvent actionEvent) {
-        String name = nameInput.getText();
-        String address = addressInput.getText();
-        String postal_code = postalCodeInput.getText();
-        String phone = phoneInput.getText();
-        Country country = countryComboBox.getSelectionModel().getSelectedItem();
-        FirstLevelDivision firstLevelDivision = divisionComboBox.getSelectionModel().getSelectedItem();
-
-        if (
-                name.equals("")
-                || address.equals("")
-                || postal_code.equals("")
-                || phone.equals("")
-                || (country == null)
-                || (firstLevelDivision == null)
-        ) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "All fields must be completed.");
-            alert.showAndWait();
-            return;
-        }
-
-        CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
-        Customer customer = customerTable.getSelectionModel().getSelectedItem();
-
-        if (customer == null) {
-            customer = new Customer();
-        }
-
-        customer.setName(name);
-        customer.setAddress(address);
-        customer.setPostalCode(postal_code);
-        customer.setPhone(phone);
-        customer.setCountry(country);
-        customer.setDivision(firstLevelDivision);
-        if (customerIDField.getText().equals("Unavailable")) {
-            int customerId = customerDAO.create(customer);
-            customer.setId(customerId);
-            customerList.add(customer);
-        } else {
-            customerDAO.update(customer);
-            Customer finalCustomer = customer;
-            customerList.setAll(customerList.stream().map(c -> {
-                if (c.getId() == finalCustomer.getId()) {
-                    return finalCustomer;
-                }
-                return c;
-            }).toList());
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -148,6 +94,57 @@ public class ManageCustomerController implements Initializable {
         });
     }
 
+    public void saveChanges(ActionEvent actionEvent) {
+        String name = nameInput.getText();
+        String address = addressInput.getText();
+        String postal_code = postalCodeInput.getText();
+        String phone = phoneInput.getText();
+        Country country = countryComboBox.getSelectionModel().getSelectedItem();
+        FirstLevelDivision firstLevelDivision = divisionComboBox.getSelectionModel().getSelectedItem();
+
+        if (
+                name.equals("")
+                || address.equals("")
+                || postal_code.equals("")
+                || phone.equals("")
+                || (country == null)
+                || (firstLevelDivision == null)
+        ) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "All fields must be completed.");
+            alert.showAndWait();
+            return;
+        }
+
+        CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+
+        if (customer == null) {
+            customer = new Customer();
+        }
+
+        customer.setName(name);
+        customer.setAddress(address);
+        customer.setPostalCode(postal_code);
+        customer.setPhone(phone);
+        customer.setCountry(country);
+        customer.setDivision(firstLevelDivision);
+        if (customerIDField.getText().equals("Unavailable")) {
+            int customerId = customerDAO.create(customer);
+            customer.setId(customerId);
+            customerList.add(customer);
+            customerIDField.setText(String.valueOf(customerId));
+        } else {
+            customerDAO.update(customer);
+            Customer finalCustomer = customer;
+            customerList.setAll(customerList.stream().map(c -> {
+                if (c.getId() == finalCustomer.getId()) {
+                    return finalCustomer;
+                }
+                return c;
+            }).toList());
+        }
+    }
+
     public void addNewCustomer(ActionEvent actionEvent) {
         customerTable.getSelectionModel().clearSelection();
 
@@ -174,12 +171,19 @@ public class ManageCustomerController implements Initializable {
         }
 
         CustomerDAO customerDAO = new CustomerDAO(DBConnector.connection);
+        AppointmentDAO appointmentDAO = new AppointmentDAO(DBConnector.connection);
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove this customer from the database? Deleting a customer will also delete all of their appointments.");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove this customer from the database? Deleting a customer will also cancel all of their appointments.");
         alert.showAndWait()
                 .filter(response -> response == ButtonType.OK)
                 .ifPresent(response -> {
-                    // TODO: Delete customer appointments before deleting customer
+                    try {
+                        appointmentDAO.deleteForCustomer(customer.getId());
+                    } catch (Exception e) {
+                        Alert warning = new Alert(Alert.AlertType.ERROR, "There was an error while trying to remove appointments for this customer. Please try again or contact support for assistance.");
+                        warning.showAndWait();
+                        return;
+                    }
                     customerDAO.delete(customer);
                     customerList.remove(customer);
                 });

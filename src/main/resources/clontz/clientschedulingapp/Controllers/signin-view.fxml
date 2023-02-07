@@ -7,21 +7,38 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="username" alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="960.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clontz.clientschedulingapp.Controllers.LoginController">
+<VBox fx:id="username" alignment="CENTER_LEFT" fillWidth="false" prefHeight="600.0" prefWidth="960.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clontz.clientschedulingapp.Controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Pane prefHeight="200.0" prefWidth="240.0">
+    <Pane prefHeight="301.0" prefWidth="240.0">
         <children>
-            <VBox fillWidth="false" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
-                <Label text="Username" />
+            <VBox fillWidth="false" prefHeight="250.0" prefWidth="240.0" spacing="10.0">
+                <Label fx:id="usernameLabel" text="Username" />
                 <TextField fx:id="usernameField" />
-                <Label text="Password" />
+                <Label fx:id="passwordLabel" text="Password" />
                 <TextField fx:id="passwordField" />
             <Button fx:id="signinBtn" mnemonicParsing="false" onAction="#attemptLogin" text="Sign In" />
 
-                <Label fx:id="languageText" text="Language" />
+                      <Label fx:id="languageText" prefHeight="17.0" prefWidth="234.0" text="Language">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="languageLabel" prefHeight="17.0" prefWidth="238.0" text="Label" />
+            <Label fx:id="timeZoneText" prefHeight="17.0" prefWidth="237.0" text="Local Time Zone">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="timeZoneLabel" prefHeight="17.0" prefWidth="240.0" text="Label" />
             </VBox>
         </children>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+      <VBox.margin>
+         <Insets left="100.0" />
+      </VBox.margin>
     </Pane>
 </VBox>

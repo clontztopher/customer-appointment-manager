@@ -96,10 +96,8 @@
                   <ComboBox fx:id="contactBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Customer" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <ComboBox fx:id="customerBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
-                  <Label text="Start Date" GridPane.columnIndex="3" />
-                  <DatePicker fx:id="startDateSelect" promptText="Select Start Date" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label text="End Date" GridPane.columnIndex="4" />
-                  <DatePicker fx:id="endDateSelect" promptText="Select End Date" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <Label text="Date" GridPane.columnIndex="3" />
+                  <DatePicker fx:id="dateSelect" promptText="Select Start Date" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="End Time (HH:MM)" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                   <TextField fx:id="typeInput" prefHeight="11.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Label text="Start Time  (HH:MM)" GridPane.columnIndex="3" GridPane.rowIndex="2" />

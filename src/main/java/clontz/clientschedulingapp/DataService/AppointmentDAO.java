@@ -13,10 +13,12 @@ import java.util.List;
 public class AppointmentDAO {
 
     private final Connection connection;
-    private final String FIND_ALL = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID FROM appointments";
-    private final String FIND_BY_CUSTOMER = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID FROM appointments WHERE Customer_ID = ?";
-    private final String INSERT = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String UPDATE = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+    private static final String FIND_ALL = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID FROM appointments";
+    private static final String FIND_BY_CUSTOMER = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID FROM appointments WHERE Customer_ID = ?";
+    private static final String INSERT = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+    private static final String DELETE = "DELETE FROM appointments WHERE Appointment_ID = ?";
+    private static final String DELETE_CUSTOMER_APPOINTMENTS = "DELETE FROM appointments WHERE Customer_ID = ?";
 
     public AppointmentDAO(Connection connection) {
         this.connection = connection;
@@ -126,6 +128,26 @@ public class AppointmentDAO {
             prepState.setInt(10, appointment.getId());
             prepState.execute();
         } catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(Appointment appointment) {
+        try (PreparedStatement prepState = connection.prepareStatement(DELETE)) {
+            prepState.setInt(1, appointment.getId());
+            prepState.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteForCustomer(int customer_id) throws RuntimeException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CUSTOMER_APPOINTMENTS)) {
+            preparedStatement.setInt(1, customer_id);
+            preparedStatement.execute();
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
