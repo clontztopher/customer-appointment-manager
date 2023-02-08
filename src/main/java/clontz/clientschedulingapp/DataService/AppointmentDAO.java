@@ -3,10 +3,9 @@ package clontz.clientschedulingapp.DataService;
 import clontz.clientschedulingapp.Models.Appointment;
 import clontz.clientschedulingapp.Models.Contact;
 import clontz.clientschedulingapp.Models.Customer;
+import clontz.clientschedulingapp.Models.User;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class AppointmentDAO {
         List<Appointment> allAppointments = new ArrayList<>();
         ContactDAO contactDAO = new ContactDAO(connection);
         CustomerDAO customerDAO = new CustomerDAO(connection);
+        UserDAO userDAO = new UserDAO(connection);
 
         try (PreparedStatement prepState = connection.prepareStatement(FIND_ALL)) {
             ResultSet rs = prepState.executeQuery();
@@ -35,6 +35,7 @@ public class AppointmentDAO {
                 Appointment appointment = new Appointment();
                 Contact contact = contactDAO.findById(rs.getInt("Contact_ID"));
                 Customer customer = customerDAO.findById(rs.getInt("Customer_ID"));
+                User user = userDAO.findById(rs.getInt("User_ID"));
 
                 appointment.setId(rs.getInt("Appointment_ID"));
                 appointment.setTitle(rs.getString("Title"));
@@ -43,7 +44,7 @@ public class AppointmentDAO {
                 appointment.setType(rs.getString("Type"));
                 appointment.setStart(rs.getTimestamp("Start").toLocalDateTime());
                 appointment.setEnd(rs.getTimestamp("End").toLocalDateTime());
-                appointment.setUserId(rs.getInt("User_ID"));
+                appointment.setUser(user);
                 appointment.setCustomer(customer);
                 appointment.setContact(contact);
                 allAppointments.add(appointment);
@@ -59,6 +60,7 @@ public class AppointmentDAO {
         List<Appointment> appointments = new ArrayList<>();
         ContactDAO contactDAO = new ContactDAO(connection);
         CustomerDAO customerDAO = new CustomerDAO(connection);
+        UserDAO userDAO = new UserDAO(connection);
 
         try (PreparedStatement prepState = connection.prepareStatement(FIND_BY_CUSTOMER)) {
             prepState.setInt(1, customer_id);
@@ -68,6 +70,7 @@ public class AppointmentDAO {
                 Appointment appointment = new Appointment();
                 Contact contact = contactDAO.findById(rs.getInt("Contact_ID"));
                 Customer customer = customerDAO.findById(rs.getInt("Customer_ID"));
+                User user = userDAO.findById(rs.getInt("User_ID"));
 
                 appointment.setId(rs.getInt("Appointment_ID"));
                 appointment.setTitle(rs.getString("Title"));
@@ -76,7 +79,7 @@ public class AppointmentDAO {
                 appointment.setType(rs.getString("Type"));
                 appointment.setStart(rs.getTimestamp("Start").toLocalDateTime());
                 appointment.setEnd(rs.getTimestamp("End").toLocalDateTime());
-                appointment.setUserId(rs.getInt("User_ID"));
+                appointment.setUser(user);
                 appointment.setCustomer(customer);
                 appointment.setContact(contact);
                 appointments.add(appointment);
@@ -97,7 +100,7 @@ public class AppointmentDAO {
             prepState.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
             prepState.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
             prepState.setInt(7, appointment.getCustomer().getId());
-            prepState.setInt(8, appointment.getUserId());
+            prepState.setInt(8, appointment.getUser().getId());
             prepState.setInt(9, appointment.getContact().getId());
 
             prepState.executeUpdate();
@@ -123,7 +126,7 @@ public class AppointmentDAO {
             prepState.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
             prepState.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
             prepState.setInt(7, appointment.getCustomer().getId());
-            prepState.setInt(8, appointment.getUserId());
+            prepState.setInt(8, appointment.getUser().getId());
             prepState.setInt(9, appointment.getContact().getId());
             prepState.setInt(10, appointment.getId());
             prepState.execute();

@@ -78,7 +78,7 @@ public class LoginController implements Initializable {
         // TODO: For testing, remove
         usernameField.setText("test");
         passwordField.setText("test");
-        LocalizationService.changeLocale(Locale.FRENCH);
+//        LocalizationService.changeLocale(Locale.FRENCH);
         // END test instructions
 
         LocalizationService.setResourceBundle("labels");

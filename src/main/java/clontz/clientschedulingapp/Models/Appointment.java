@@ -11,9 +11,8 @@ public class Appointment {
     private String type;
     private LocalDateTime start;
     private LocalDateTime end;
-
     private Customer customer;
-    private int user_id;
+    private User user;
     private Contact contact;
 
     public int getId() {
@@ -84,12 +83,12 @@ public class Appointment {
         this.customer = customer;
     }
 
-    public int getUserId() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Contact getContact() {
@@ -106,5 +105,9 @@ public class Appointment {
 
     public String getEndFormatted() {
         return getEnd().format(DateTimeFormatter.ofPattern("MM/dd/YYYY hh:mm a"));
+    }
+
+    public int getUserId() {
+        return getUser().getId();
     }
 }

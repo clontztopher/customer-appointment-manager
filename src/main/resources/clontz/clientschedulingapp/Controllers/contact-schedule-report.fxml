@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clontz.clientschedulingapp.Controllers.ContactScheduleReportController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="600.0">
+         <children>
+            <Label text="Appointments for contact: ">
+               <padding>
+                  <Insets left="20.0" right="10.0" />
+               </padding>
+            </Label>
+            <ComboBox fx:id="contactBox" onAction="#handleContactSelect" prefWidth="150.0" promptText="Select Contact" />
+         </children>
+      </HBox>
+      <TableView fx:id="appointmentTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <columns>
+            <TableColumn fx:id="idCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
+            <TableColumn fx:id="descCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Description" />
+            <TableColumn fx:id="locationCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Location" />
+            <TableColumn fx:id="contactCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Contact" />
+            <TableColumn fx:id="typeCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Type" />
+            <TableColumn fx:id="startCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Start" />
+            <TableColumn fx:id="endCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="End" />
+            <TableColumn fx:id="customerCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="Customer ID" />
+            <TableColumn fx:id="userCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="User ID" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" />
+   </padding>
+</VBox>

@@ -6,11 +6,13 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -25,7 +27,7 @@
       <Separator prefWidth="200.0" />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <VBox prefHeight="125.0" prefWidth="270.0" spacing="5.0" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="200.0" prefWidth="231.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <Text fill="#545454" strokeType="OUTSIDE" strokeWidth="0.0" text="Add/Update Appointments">
                      <VBox.margin>
@@ -73,17 +75,18 @@
             <GridPane hgap="10.0" minHeight="200.0" vgap="5.0" HBox.hgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="181.5" minWidth="138.5" prefWidth="162.5" />
-                  <ColumnConstraints hgrow="ALWAYS" maxWidth="147.0" minWidth="10.0" prefWidth="123.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="135.0" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="186.5" minWidth="138.5" prefWidth="138.5" />
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="147.0" minWidth="10.0" prefWidth="114.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="33.0" valignment="BOTTOM" vgrow="ALWAYS" />
                 <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="35.0" valignment="BOTTOM" vgrow="ALWAYS" />
                 <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="38.0" valignment="BOTTOM" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="59.0" minHeight="25.0" prefHeight="42.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="59.0" minHeight="25.0" prefHeight="46.0" valignment="BOTTOM" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="30.0" minHeight="1.0" prefHeight="18.0" valignment="BOTTOM" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="24.0" valignment="BOTTOM" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
                   <Label text="Title" />
@@ -91,7 +94,7 @@
                   <Label text="Location" GridPane.columnIndex="1" />
                   <TextField fx:id="locationInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Description" GridPane.rowIndex="2" />
-                  <TextArea fx:id="descriptionTextBox" prefHeight="124.0" prefWidth="212.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <TextArea fx:id="descriptionTextBox" prefHeight="23.0" prefWidth="210.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                   <Label text="Contact" GridPane.columnIndex="2" />
                   <ComboBox fx:id="contactBox" prefWidth="150.0" promptText="Select Contact" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Customer" GridPane.columnIndex="2" GridPane.rowIndex="2" />
@@ -99,11 +102,13 @@
                   <Label text="Date" GridPane.columnIndex="3" />
                   <DatePicker fx:id="dateSelect" promptText="Select Start Date" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="End Time (HH:MM)" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <TextField fx:id="typeInput" prefHeight="11.0" prefWidth="102.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="typeInput" prefHeight="7.0" prefWidth="100.0" GridPane.rowIndex="5" />
                   <Label text="Start Time  (HH:MM)" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <Label text="Type" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                  <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
                   <TextField fx:id="startTimeField" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.valignment="TOP" />
                   <TextField fx:id="endTimeField" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                  <Label text="User" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="userBox" prefWidth="150.0" promptText="Select User" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                </children>
             </GridPane>
          </children>
@@ -111,9 +116,24 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <Separator prefWidth="200.0" />
+      <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
          <children>
-            <TableView fx:id="appointmentTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="960.0" spacing="20.0">
+               <children>
+                  <RadioButton fx:id="radioAll" mnemonicParsing="false" onAction="#filterChange" selected="true" text="All Appointments">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="appointmentFilterGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="radioWeek" mnemonicParsing="false" onAction="#filterChange" text="This Week" toggleGroup="$appointmentFilterGroup" />
+                  <RadioButton fx:id="radioMonth" mnemonicParsing="false" onAction="#filterChange" text="This Month" toggleGroup="$appointmentFilterGroup" />
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <TableView fx:id="appointmentTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="idCol" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="ID" />
                   <TableColumn fx:id="descCol" maxWidth="1000.0" minWidth="50.0" prefWidth="-1.0" text="Description" />
@@ -130,6 +150,6 @@
                </columnResizePolicy>
             </TableView>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </VBox>

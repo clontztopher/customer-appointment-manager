@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clontz.clientschedulingapp.Controllers.ReportsController">
    <children>
       <fx:include fx:id="navMenu" source="nav-view.fxml" />
       <Separator prefWidth="200.0" />
+      <Pane fx:id="notificationPane" prefHeight="49.0" prefWidth="960.0">
+         <children>
+            <Text fx:id="notificationText" layoutX="35.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+         </children>
+      </Pane>
+      <TabPane fx:id="reportTabs" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+            <Tab fx:id="apptCountsTab" text="Appointment Counts" />
+          <Tab fx:id="contactScheduleTab" text="Contact Schedules" />
+            <Tab fx:id="myAppointmentsTab" text="My Appointments" />
+        </tabs>
+      </TabPane>
    </children>
 </VBox>

@@ -1,15 +1,13 @@
 package clontz.clientschedulingapp.Controllers;
 
-import clontz.clientschedulingapp.DataService.AppointmentDAO;
-import clontz.clientschedulingapp.DataService.ContactDAO;
-import clontz.clientschedulingapp.DataService.CustomerDAO;
-import clontz.clientschedulingapp.DataService.DBConnector;
-import clontz.clientschedulingapp.Helpers.Session;
+import clontz.clientschedulingapp.DataService.*;
 import clontz.clientschedulingapp.Models.Appointment;
 import clontz.clientschedulingapp.Models.Contact;
 import clontz.clientschedulingapp.Models.Customer;
+import clontz.clientschedulingapp.Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,6 +19,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,9 +31,9 @@ public class ManageAppointmentController implements Initializable {
     public TextArea descriptionTextBox;
     public ComboBox<Contact> contactBox;
     public ComboBox<Customer> customerBox;
+    public ComboBox<User> userBox;
     public DatePicker dateSelect;
     public TextField typeInput;
-    public ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     public TableView<Appointment> appointmentTable;
     public TableColumn<String, Integer> idCol;
     public TableColumn<String, String> descCol;
@@ -47,6 +46,11 @@ public class ManageAppointmentController implements Initializable {
     public TableColumn<String, Integer> userCol;
     public TextField startTimeField;
     public TextField endTimeField;
+    public RadioButton radioAll;
+    public RadioButton radioWeek;
+    public RadioButton radioMonth;
+    public ToggleGroup appointmentFilterGroup;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,8 +68,16 @@ public class ManageAppointmentController implements Initializable {
         customerComboList.addAll(customerList);
         customerBox.setItems(customerComboList);
 
+        // Users
+        UserDAO userDAO = new UserDAO(DBConnector.connection);
+        List<User> userList = userDAO.findAll();
+        ObservableList<User> userComboList = FXCollections.observableArrayList();
+        userComboList.addAll(userList);
+        userBox.setItems(userComboList);
+
         // Appointment Table
         setUpAppointmentTable();
+        updateTabe();
     }
 
     public void saveChanges(ActionEvent actionEvent) {
@@ -75,10 +87,10 @@ public class ManageAppointmentController implements Initializable {
         String type = typeInput.getText();
         Contact contact = contactBox.getValue();
         Customer customer = customerBox.getValue();
+        User user = userBox.getValue();
         LocalDate date = dateSelect.getValue();
         String startTimeText = startTimeField.getText();
         String endTimeText = endTimeField.getText();
-        int user_id = Session.getUser().getId();
 
         if (
                 title.equals("")
@@ -88,6 +100,7 @@ public class ManageAppointmentController implements Initializable {
                 || (contact == null)
                 || (customer == null)
                 || (date == null)
+                || (user == null)
                 || startTimeText.equals("")
                 || endTimeText.equals("")
         ) {
@@ -124,6 +137,18 @@ public class ManageAppointmentController implements Initializable {
             return;
         }
 
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a future date.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (startDateTime.isAfter(endDateTime)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "End time must be after start time.");
+            alert.showAndWait();
+            return;
+        }
+
         if (hasConflicts(appointment.getId(), customer, startDateTime, endDateTime)) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Appointment start/end times conflict with existing appointment. Please choose another time.");
             alert.showAndWait();
@@ -138,24 +163,17 @@ public class ManageAppointmentController implements Initializable {
         appointment.setContact(contact);
         appointment.setCustomer(customer);
         appointment.setType(type);
-        appointment.setUserId(user_id);
+        appointment.setUser(user);
 
         AppointmentDAO appointmentDAO = new AppointmentDAO(DBConnector.connection);
 
         if (appointmentIDField.getText().equals("Unavailable")) {
                 int appointmentId = appointmentDAO.create(appointment);
-                appointment.setId(appointmentId);
-                appointments.add(appointment);
                 appointmentIDField.setText(String.valueOf(appointmentId));
+                updateTabe();
         } else {
             appointmentDAO.update(appointment);
-            Appointment finalAppointment = appointment;
-            appointments.setAll(appointments.stream().map(a -> {
-                if (finalAppointment.getId() == a.getId()) {
-                    return finalAppointment;
-                }
-                return a;
-            }).toList());
+            updateTabe();
         }
     }
 
@@ -172,6 +190,9 @@ public class ManageAppointmentController implements Initializable {
 
         customerBox.getSelectionModel().clearSelection();
         customerBox.setValue(null);
+
+        userBox.getSelectionModel().clearSelection();
+        userBox.setValue(null);
 
         dateSelect.setValue(null);
         startTimeField.setText("");
@@ -196,12 +217,11 @@ public class ManageAppointmentController implements Initializable {
                 .filter(response -> response == ButtonType.OK)
                 .ifPresent(response -> {
                     appointmentDAO.delete(appointment);
-                    appointments.remove(appointment);
+                    updateTabe();
                 });
     }
 
     public void setUpAppointmentTable() {
-        appointmentTable.setItems(appointments);
         idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         descCol.setCellValueFactory(new PropertyValueFactory<>("Description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("Location"));
@@ -211,11 +231,6 @@ public class ManageAppointmentController implements Initializable {
         endCol.setCellValueFactory(new PropertyValueFactory<>("EndFormatted"));
         customerCol.setCellValueFactory(new PropertyValueFactory<>("CustomerId"));
         userCol.setCellValueFactory(new PropertyValueFactory<>("UserId"));
-
-        AppointmentDAO appointmentDAO = new AppointmentDAO(DBConnector.connection);
-        List<Appointment> xAppointments = appointmentDAO.findAll();
-
-        appointments.addAll(xAppointments);
 
         appointmentTable.getSelectionModel().selectedItemProperty().addListener(e -> {
             Appointment selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
@@ -230,6 +245,7 @@ public class ManageAppointmentController implements Initializable {
             descriptionTextBox.setText(selectedAppointment.getDescription());
             contactBox.setValue(selectedAppointment.getContact());
             customerBox.setValue(selectedAppointment.getCustomer());
+            userBox.setValue(selectedAppointment.getUser());
 
             // Start/End Times
             LocalDateTime startDateTime = selectedAppointment.getStart();
@@ -297,5 +313,39 @@ public class ManageAppointmentController implements Initializable {
             }
         }
         return false;
+    }
+
+    public void filterChange(ActionEvent actionEvent) {
+        updateTabe();
+    }
+
+    public void updateTabe() {
+        AppointmentDAO appointmentDAO = new AppointmentDAO(DBConnector.connection);
+        List<Appointment> xAppointments = appointmentDAO.findAll();
+        ObservableList<Appointment> apptsTableList = FXCollections.observableArrayList();
+        apptsTableList.addAll(xAppointments);
+
+        Toggle selected = appointmentFilterGroup.getSelectedToggle();
+        if (selected.equals(radioAll)) {
+            appointmentTable.setItems(apptsTableList);
+            return;
+        }
+        if (selected.equals(radioWeek)) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime endOfWeek = now.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+            FilteredList<Appointment> filteredList = apptsTableList.filtered(appointment ->
+                    appointment.getStart().isAfter(now)
+                            && appointment.getStart().isBefore(endOfWeek));
+            appointmentTable.setItems(filteredList);
+            return;
+        }
+        if (selected.equals(radioMonth)) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime nextMonth = now.with(TemporalAdjusters.firstDayOfNextMonth());
+            FilteredList<Appointment> filteredList = apptsTableList.filtered(appointment ->
+                    appointment.getStart().isBefore(nextMonth)
+                            && appointment.getStart().isAfter(now));
+            appointmentTable.setItems(filteredList);
+        }
     }
 }
